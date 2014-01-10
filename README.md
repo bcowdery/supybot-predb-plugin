@@ -6,13 +6,22 @@ Plugin for the supybot IRC bot for checking scene releases against the pre datab
 
 # Getting Started
 
+
+## Cloning the repository
+  
+    $ git clone git@github.com:bcowdery/supybot-predupe-check.git
+
 ## Dependencies
 
 * [requests](http://docs.python-requests.org/)
 
 **Installation:**
 ```
-pip install requests
+$ pip install requests
+
+or
+
+$ easy_install requests
 ```
 
 
@@ -39,3 +48,7 @@ certificate store is enough to solve most SSL verification errors_
 
 * [PRE.iM API Documentation](https://pre.im/doku/index.htm)
 
+
+# License
+
+Licensed under the MIT license.

@@ -1,8 +1,9 @@
+#!/usr/bin/python
 import ConfigParser
-import urlparse
-import requests
-import json
+import urlparse, requests, json
 
+
+# config
 config = ConfigParser.ConfigParser()
 config.readfp(open('pre.cfg'))
 
@@ -10,6 +11,8 @@ url    = config.get('PreDb', 'Url')
 apikey = config.get('PreDb', 'ApiKey')
 verify = config.getboolean('PreDb', 'VerifyCertificate')
 
+
+# http request
 headers = {
     'Accesskey': apikey,
     'Accept': 'application/json',
@@ -24,4 +27,7 @@ payload = {
 r = requests.post(urlparse.urljoin(url, 'dupe'), data=json.dumps(payload), headers=headers, verify=verify)
 r.raise_for_status()
 
-print r.content
+
+# toss out extra junk in the response, just parse json blob
+result = json.loads(r.text.split('\n')[-1])
+print result
