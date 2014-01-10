@@ -6,8 +6,13 @@ Plugin for the supybot IRC bot for checking scene releases against the pre datab
 
 **Command line usage:**
 ```
-$ python dupe.py -q "eyes wide shut"
+$ python dupe.py --query "eyes wide shut"
 ```
+
+* `-h`, `--help` Show help message and exit
+* `-q`, `--query` The query to search for
+* `-l`, `--limit` Show x number of releases
+
 
 
 # Getting Started
