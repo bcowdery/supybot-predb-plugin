@@ -1,6 +1,14 @@
 #!/usr/bin/python
-import ConfigParser
+import argparse, ConfigParser
 import urlparse, requests, json
+
+
+# command line args
+parser = argparse.ArgumentParser(description="Query PRE.iM for duplicate releases")
+parser.add_argument('-q', '--query', metavar='q', help='The query to search for')
+parser.add_argument('-l', '--limit', metavar='n', type=int, required=False, default=10, help='Show x number of releases')
+
+args = parser.parse_args()
 
 
 # config
@@ -20,8 +28,8 @@ headers = {
 }
 
 payload = {
-    'search': 'eyes wide shut',
-    'limit': 10
+    'search': args.query,
+    'limit': args.limit
 }
 
 r = requests.post(urlparse.urljoin(url, 'dupe'), data=json.dumps(payload), headers=headers, verify=verify)

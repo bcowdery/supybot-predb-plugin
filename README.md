@@ -4,6 +4,12 @@ Supybot Pre Dupe Check
 Plugin for the supybot IRC bot for checking scene releases against the pre database.
 
 
+**Command line usage:**
+```
+$ python dupe.py -q "eyes wide shut"
+```
+
+
 # Getting Started
 
 
