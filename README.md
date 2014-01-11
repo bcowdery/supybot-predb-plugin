@@ -38,7 +38,9 @@ $ easy_install requests
 
 ## Configuration
 
-A sample configuration file `pre.cfg.sample` is provided
+A sample configuration file `pre.cfg.sample` is provided. Rename the file to 'pre.cfg', fill in your PRE.iM Accesskey
+and you're good to go.
+
 
 ```config
 [PreDb]
