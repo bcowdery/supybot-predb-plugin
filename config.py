@@ -13,4 +13,4 @@ Dupe = conf.registerPlugin('Dupe')
 conf.registerGlobalValue(Dupe, 'limit',
     registry.String('10', """Maximum number of results to return from the pre.im
                              database. If the number of results found exceeds this
-                             value they will not be shown.""")
+                             value they will not be shown."""))
