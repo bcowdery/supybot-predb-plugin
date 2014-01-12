@@ -18,7 +18,8 @@ class Dupe(callbacks.Plugin):
     def _dupe(self, irc, query, limit):
         results = pre.dupe(query, limit)
         if (results):
-            irc.reply(format('Got %s.', results))
+            irc.reply(format('Got %s.', results.length))
+            irc.reply(format('Results %s', results), private=True)
         else:
             irc.reply(format('Could not find any results for %s.', name))
 
