@@ -9,8 +9,8 @@ def configure(advanced):
     from supybot.questions import expect, anything, something, yn
     conf.registerPlugin('Dupe', True)
 
-
 Dupe = conf.registerPlugin('Dupe')
-# This is where your configuration variables (if any) should go.  For example:
-# conf.registerGlobalValue(Dupe, 'someConfigVariableName',
-#     registry.Boolean(False, """Help for someConfigVariableName."""))
+conf.registerGlobalValue(Dupe, 'limit',
+    registry.String('10', """Maximum number of results to return from the pre.im
+                             database. If the number of results found exceeds this
+                             value they will not be shown.""")

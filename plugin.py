@@ -14,30 +14,21 @@ import supybot.callbacks as callbacks
 
 
 class Dupe(callbacks.Plugin):
-    noIgnore = True
-    def __init__(self, irc):
-        self.__parent = super(Seen, self)
-        self.__parent.__init__(irc)
 
-    def die(self):
-        self.__parent.die()
-
-    def __call__(self, irc, msg):
-        self.__parent.__call__(irc, msg)
-
-    def _seen(self, irc, channel, name, any=False):
-        results = pre.dupe(name, 10)
+    def _dupe(self, irc, query, limit):
+        results = pre.dupe(query, limit)
         if (results):
-            irc.reply(format('I haven\'t seen anyone matching %s.', name))
+            irc.reply(format('Got %s.', results))
         else:
             irc.reply(format('Could not find any results for %s.', name))
 
-    def dupe(self, irc, msg, args, channel, name):
-        """<name>
+    def dupe(self, irc, msg, args, text):
+        """dupe <search>
 
-        Searches for scene dupes by <name>.
+        Perform a search for dupe releases using Pre.im's Web API
         """
-        self._dupe(irc, channel, name)
-    dupe = wrap(dupe, ['channel', 'something'])
+        limit = self.registryValue('limit', msg.args[0])
+        self._dupe(irc, text, limit)
+    dupe = wrap(dupe, ['text'])
 
 Class = Dupe
