@@ -1,5 +1,3 @@
-import pre
-
 import supybot.log as log
 import supybot.conf as conf
 import supybot.utils as utils
@@ -12,11 +10,17 @@ import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 
+from lib import pre
 
 class Pre(callbacks.Plugin):
 
+    def __init__(self):
+        url = self.registryValue('url')
+        accesskey = self.registryValue('accesskey')
+        self._predb = pre.Releases(url=url, accesskey=accesskey)
+
     def _dupe(self, irc, query, limit):
-        results = pre.dupe(query, limit)
+        results = self._predb.dupe(query, limit)
         if (results):
             irc.reply(format('Got %s.', results.length))
             irc.reply(format('Results %s', results), private=True)

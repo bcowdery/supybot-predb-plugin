@@ -1,4 +1,4 @@
-[PreDb]
-ApiKey: deadbeef123
+[pre]
+AccessKey:
 Url: https://api.pre.im/v1.0/
 VerifyCertificate: False

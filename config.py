@@ -9,8 +9,19 @@ def configure(advanced):
     from supybot.questions import expect, anything, something, yn
     conf.registerPlugin('Pre', True)
 
-Dupe = conf.registerPlugin('Pre')
-conf.registerGlobalValue(Dupe, 'limit',
-    registry.String('10', """Maximum number of results to return from the pre.im
-                             database. If the number of results found exceeds this
-                             value they will not be shown."""))
+Pre = conf.registerPlugin('Pre')
+
+conf.registerGlobalValue(Pre, 'url',
+    registry.String('https://api.pre.im/v1.0/',
+                    """URL of the PRE.iM Web API"""))
+
+conf.registerGlobalValue(Pre, 'accesskey',
+    registry.String('deadbeef',
+                    """Web API access key to be sent in HTTP headers when
+                       making database requests."""))
+
+conf.registerGlobalValue(Pre, 'limit',
+    registry.String('10',
+                    """Maximum number of results to return from the pre.im
+                       database. If the number of results found exceeds this
+                       value they will not be shown."""))

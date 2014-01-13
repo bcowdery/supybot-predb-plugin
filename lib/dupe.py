@@ -10,4 +10,5 @@ parser.add_argument('-l', '--limit', metavar='n', type=int, default=10, help='Sh
 args = parser.parse_args()
 
 # query
-print pre.dupe(args.query, args.limit)
+r = pre.Releases()
+print r.dupe(args.query, args.limit)
