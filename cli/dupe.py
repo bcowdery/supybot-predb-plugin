@@ -1,7 +1,6 @@
 #!/usr/bin/python
 import sys, os
 import ConfigParser, argparse
-import datetime
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
 import pre
@@ -30,16 +29,14 @@ args = parser.parse_args()
 
 # query
 r = pre.Releases(url, accesskey, verify)
-
 releases = None
 
 if args.deleted:
-    releases = r.edupe(args.query, section=args.section, group=args.group, limit=args.limit)
+    releases = r.edupe(args.query, args.group, args.section, args.limit)
 elif args.oldest:
-    releases = r.rdupe(args.query, section=args.section, group=args.group, limit=args.limit)
+    releases = r.rdupe(args.query, args.group, args.section, args.limit)
 else:
-    releases = r.dupe(args.query, section=args.section, group=args.group, limit=args.limit)
+    releases = r.dupe(args.query, args.group, args.section, args.limit)
 
-for i in releases:
-    time = datetime.datetime.fromtimestamp(i['time'])
-    print "[PRE/{0:<10}] {1} [F{2}/{3}MB] [{4}]".format(i['section'], i['release'], i['files'], i['size'], time)
+for r in releases:
+    print r

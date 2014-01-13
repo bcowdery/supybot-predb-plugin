@@ -38,4 +38,8 @@ elif args.nuke:
 else:
     releases = r.lastunnukes(args.group, args.section, args.limit)
 
-print releases
+if releases:
+    for r in releases:
+        print r
+        if r.nukes:
+            print r.nukes[0]
