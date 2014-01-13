@@ -15,9 +15,11 @@ from lib import pre
 class Pre(callbacks.Plugin):
 
     def __init__(self):
-        url = self.registryValue('url')
+        url       = self.registryValue('url')
         accesskey = self.registryValue('accesskey')
-        self._predb = pre.Releases(url=url, accesskey=accesskey)
+        verify    = self.registryValue('verify')
+
+        self._predb = pre.Releases(url=url, accesskey=accesskey, verify=verify)
 
     def _dupe(self, irc, query, limit):
         results = self._predb.dupe(query, limit)

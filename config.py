@@ -15,6 +15,10 @@ conf.registerGlobalValue(Pre, 'url',
     registry.String('https://api.pre.im/v1.0/',
                     """URL of the PRE.iM Web API"""))
 
+conf.registerGlobalValue(Pre, 'verify',
+    registry.Boolean(False,
+                    """Set to false to ignore SSL certificate errors"""))
+
 conf.registerGlobalValue(Pre, 'accesskey',
     registry.String('deadbeef',
                     """Web API access key to be sent in HTTP headers when

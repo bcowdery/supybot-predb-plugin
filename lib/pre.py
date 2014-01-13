@@ -8,9 +8,9 @@ class Releases:
         config = ConfigParser.ConfigParser()
         config.read('pre.cfg')
 
-        self.url = config.get(CFG_SECTION, 'Url') if not url else url
+        self.url       = config.get(CFG_SECTION, 'Url') if not url else url
         self.accesskey = config.get(CFG_SECTION, 'AccessKey') if not accesskey else accesskey
-        self.verify = config.getboolean(CFG_SECTION, 'VerifyCertificate') if verify == None else verify
+        self.verify    = config.getboolean(CFG_SECTION, 'VerifyCertificate') if verify == None else verify
 
     def __headers(self):
         return {
@@ -20,10 +20,6 @@ class Releases:
         }
 
     def __request(self, method, options):
-        print self.url
-        print self.accesskey
-        print self.verify
-
         url = urlparse.urljoin(self.url, method)
         r = requests.post(url, data=json.dumps(options), headers=self.__headers(), verify=self.verify)
         r.raise_for_status()
