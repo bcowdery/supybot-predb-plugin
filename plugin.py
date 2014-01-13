@@ -37,9 +37,15 @@ class Pre(callbacks.Plugin):
         name using the --group option.
         """
 
+        print optlist
+
         section = optlist['section'] if 'section' in optlist else None
         group = optlist['group'] if 'group' in optlist else None
-        self._dupe(irc, text, section, group)
+
+        print section
+        print group
+
+        self._dupe(irc, text, group, section)
 
     dupe = wrap(dupe, [getopts({ 'section': None, 'group': None }), 'text'])
 
