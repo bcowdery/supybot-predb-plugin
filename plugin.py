@@ -15,21 +15,32 @@ import supybot.callbacks as callbacks
 
 
 class Pre(callbacks.Plugin):
-    def _dupe(self, irc, query, limit):
+    def __init__(self, irc=None):
+        self.__parent = super(Pre, self)
+        self.__parent.__init__(irc)
+
         accesskey = self.registryValue('accesskey')
-        r = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
-        releases = r.dupe(query, limit=limit)
+        self._pre = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
+
+    def _dupe(self, irc, query, group, section):
+        limit = self.registryValue('limit')
+        releases = self._pre.dupe(query, group, section, limit)
 
         for release in releases:
             irc.reply(release)
 
-    def dupe(self, irc, msg, args, text):
-        """dupe <search>
+    def dupe(self, irc, msg, args, optlist, text):
+        """<search> [--section <section>] [--group <group>]
 
-        Perform a search for dupe releases using Pre.im's Web API
+        Perform a search of the pre database for releases. You can filter your
+        search results by section (MP3, X264, etc) using --section and by group
+        name using the --group option.
         """
-        limit = self.registryValue('limit')
-        self._dupe(irc, text, limit)
-    dupe = wrap(dupe, ['text'])
+
+        section = optlist['section'] if 'section' in optlist else None
+        group = optlist['group'] if 'group' in optlist else None
+        self._dupe(irc, text, section, group)
+
+    dupe = wrap(dupe, [getopts({ 'section': None, 'group': None }), 'text'])
 
 Class = Pre
