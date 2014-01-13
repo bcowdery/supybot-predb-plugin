@@ -15,17 +15,13 @@ import supybot.callbacks as callbacks
 
 
 class Pre(callbacks.Plugin):
-    def __init__(self, irc):
-        accesskey = self.registryValue('accesskey')
-        self._predb = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
-
     def _dupe(self, irc, query, limit):
-        releases = self._predb.dupe(query, limit=limit)
-        if (results):
-            for release in releases:
-                irc.reply(release, private=True)
-        else:
-            irc.reply(format('Could not find any results for %s.', name))
+        accesskey = self.registryValue('accesskey')
+        r = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
+        releases = r.dupe(query, limit=limit)
+
+        for release in releases:
+            irc.reply(release)
 
     def dupe(self, irc, msg, args, text):
         """dupe <search>
