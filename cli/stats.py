@@ -16,7 +16,7 @@ verify    = config.get('pre', 'VerifyCertificate')
 
 
 # command line args
-parser = argparse.ArgumentParser(description="Show PRE.iM database information")
+parser = argparse.ArgumentParser(description="Show Pre.im database information")
 parser.add_argument('-s', '--sections', action='store_true', help='List all sections in the database')
 args = parser.parse_args()
 

@@ -16,7 +16,7 @@ verify    = config.get('pre', 'VerifyCertificate')
 
 
 # command line args
-parser = argparse.ArgumentParser(description="Query PRE.iM for releases")
+parser = argparse.ArgumentParser(description="Query Pre.im for releases")
 parser.add_argument('-q', '--query', metavar='q', required=True, help='The query to search for (required)')
 parser.add_argument('-g', '--group', metavar='g', help='Filter results by group name')
 parser.add_argument('-s', '--section', metavar='s', help='Search within a section, example: "mp3"')

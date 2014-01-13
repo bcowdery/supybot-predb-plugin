@@ -16,8 +16,8 @@ verify    = config.get('pre', 'VerifyCertificate')
 
 
 # command line args
-parser = argparse.ArgumentParser(description="Query PRE.iM for group information")
-parser.add_argument('-g', '--group', metavar='g', help='Show stats for group name')
+parser = argparse.ArgumentParser(description="Query Pre.im for group information")
+parser.add_argument('-g', '--group', metavar='g', required=True, help='Show stats for group name')
 args = parser.parse_args()
 
 # query

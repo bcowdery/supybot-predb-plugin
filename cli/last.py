@@ -16,7 +16,7 @@ verify    = config.get('pre', 'VerifyCertificate')
 
 
 # command line args
-parser = argparse.ArgumentParser(description="Query PRE.iM for the latest pres, nukes and unnukes")
+parser = argparse.ArgumentParser(description="Query Pre.im for the latest pres, nukes and unnukes")
 parser.add_argument('-g', '--group', metavar='g', help='Filter results by group name (only applicable for nukes)')
 parser.add_argument('-s', '--section', metavar='s', help='Search within a section, example: "mp3"')
 parser.add_argument('-l', '--limit', metavar='n', type=int, default=10, help='Show N number of releases')

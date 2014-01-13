@@ -16,7 +16,7 @@ verify    = config.get('pre', 'VerifyCertificate')
 
 
 # command line args
-parser = argparse.ArgumentParser(description="URL to the PreDB NFO Viewer")
+parser = argparse.ArgumentParser(description="Query Pre.im for the PreDB NFO Viewer URL for a release")
 parser.add_argument('-r', '--release', metavar='q', required=True, help='The release name to get the NFO for')
 args = parser.parse_args()
 
