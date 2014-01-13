@@ -22,4 +22,7 @@ args = parser.parse_args()
 
 # query
 r = pre.Releases(url, accesskey, verify)
-print r.group(args.group)
+group = r.group(args.group)
+
+# print the results
+print group

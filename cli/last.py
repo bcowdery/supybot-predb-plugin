@@ -41,9 +41,7 @@ else:
 
 
 # print the results
-if releases:
-    for r in releases:
-        print r
-        if args.reason:
-            if r.nukes:
-                print r.nukes[0]
+for release in releases:
+    print release
+    if args.reason:
+        print release.last_nuke()

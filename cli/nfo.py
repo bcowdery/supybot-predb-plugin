@@ -22,4 +22,8 @@ args = parser.parse_args()
 
 # query
 r = pre.Releases(url, accesskey, verify)
-print r.nfo(args.release)
+nfo = r.nfo(args.release)
+
+
+# print the results
+print nfo

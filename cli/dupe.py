@@ -38,5 +38,6 @@ elif args.oldest:
 else:
     releases = r.dupe(args.query, args.group, args.section, args.limit)
 
-for r in releases:
-    print r
+
+# print the results
+for release in releases: print release

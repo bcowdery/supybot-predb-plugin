@@ -22,10 +22,10 @@ class Releases:
 
     def _as_releases(self, list):
         releases = []
-        for rel in list:
-            releases += [ Release(rel) ]
+        if list:
+            for rel in list:
+                releases += [ Release(rel) ]
         return releases
-
 
     # Pre.IM Web API methods
 
@@ -133,10 +133,10 @@ class Release:
         self.release = dict['release']
         self.section = dict['section']
         self.genre   = dict['genre']
-        self.nukes   = self._nukes(dict['nukes'])
         self.files   = dict['files']
         self.size    = dict['size']
         self.time    = datetime.datetime.fromtimestamp(dict['time'])
+        self.nukes   = self._nukes(dict['nukes'])
 
     # Parse nukes, sort by date so the newest is first
     def _nukes(self, list):
@@ -145,21 +145,23 @@ class Release:
             for nuke in list:
                 nukes += [ Nuke(self, nuke) ]
             nukes.sort(key=lambda n: n.time)
-            return nukes
+        return nukes
 
     # Status of the release, is it nuked?
     def status(self):
         if self.nukes:
-            latest = self.nukes[0]
-
+            latest = self.last_nuke()
             if latest.ismodnuke:
                 return "MODNUKE"
             elif latest.isnuke:
                 return "NUKED"
             else:
                 return "UNNUKED"
-
         return "PRE"
+
+    def last_nuke(self):
+        if self.nukes:
+            return self.nukes[0]
 
     def __str__(self):
         return "[{0}/{1}] {2} [F{3}/{4}MB] [{5}]".format(self.status(), self.section, self.release, self.files, self.size, self.time)

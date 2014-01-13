@@ -23,10 +23,12 @@ args = parser.parse_args()
 # query
 r = pre.Releases(url, accesskey, verify)
 
+
+
+# print the results
 if args.sections:
     sections = r.sections()
-    if sections:
-        for section in sections:
-            print section
+    for section in sections: print section
 else:
-    print r.stats()
+    stats = r.stats()
+    print stats
