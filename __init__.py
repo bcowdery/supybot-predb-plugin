@@ -1,5 +1,5 @@
 """
-Queries the pre.im web API for release information
+Commands for the PRE.iM Web API
 """
 
 import supybot

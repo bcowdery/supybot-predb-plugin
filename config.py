@@ -7,9 +7,9 @@ def configure(advanced):
     # user or not.  You should effect your configuration by manipulating the
     # registry as appropriate.
     from supybot.questions import expect, anything, something, yn
-    conf.registerPlugin('Dupe', True)
+    conf.registerPlugin('Pre', True)
 
-Dupe = conf.registerPlugin('Dupe')
+Dupe = conf.registerPlugin('Pre')
 conf.registerGlobalValue(Dupe, 'limit',
     registry.String('10', """Maximum number of results to return from the pre.im
                              database. If the number of results found exceeds this

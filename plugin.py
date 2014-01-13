@@ -13,7 +13,7 @@ import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 
 
-class Dupe(callbacks.Plugin):
+class Pre(callbacks.Plugin):
 
     def _dupe(self, irc, query, limit):
         results = pre.dupe(query, limit)
@@ -32,4 +32,4 @@ class Dupe(callbacks.Plugin):
         self._dupe(irc, text, limit)
     dupe = wrap(dupe, ['text'])
 
-Class = Dupe
+Class = Pre
