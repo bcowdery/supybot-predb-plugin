@@ -15,7 +15,7 @@ import supybot.callbacks as callbacks
 
 
 class Pre(callbacks.Plugin):
-    def __init__(self):
+    def __init__(self, irc):
         accesskey = self.registryValue('accesskey')
         self._predb = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
 
