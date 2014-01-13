@@ -68,7 +68,8 @@ class Releases:
         """
         Returns information about the first, last, and number of releases in the given group.
         """
-        return self._request('group', { 'group': group })
+        r = self._request('group', { 'group': group })
+        return Group(group, r)
 
     def lastnukes(self, group=None, section=None, limit=None):
         """
@@ -113,13 +114,18 @@ class Releases:
         """
         Returns a list of all sections in the pre database.
         """
-        return self._request('sections')
+        r = self._request('sections')
+        sections = []
+        for sect in r:
+            sections += [ Section(sect) ]
+        return sections
 
     def stats(self):
         """
         Returns some statistics about the pre database.
         """
-        return self._request('stats')
+        r = self._request('stats')
+        return Stats(r)
 
 
 class Release:
@@ -183,3 +189,55 @@ class Nuke:
 
     def __repr__(self):
         return self.__str__()
+
+
+class Section:
+    def __init__(self, dict):
+        self.section = dict['section']
+        self.count   = dict['count']
+
+    def __str__(self):
+        return "\t{0:<20} \t{1}".format(self.section, self.count)
+
+    def __unicode__(self):
+        return unicode(self.__str__())
+
+    def __repr__(self):
+        return self.__str__()
+
+
+class Stats:
+    def __init__(self, dict):
+        self.releases = dict['releases']
+        self.nukes = dict['nukes']
+        self.unnukes = dict['unnukes']
+        self.deletes = dict['deletes']
+        self.undeletes = dict['undeletes']
+        self.first = Release(dict['first'])
+        self.last = Release(dict['last'])
+
+    def __str__(self):
+        return """
+        Releases:  {0}
+        Nukes:     {1}
+        Unnukes:   {2}
+        Deletes:   {3}
+        UnDeletes: {4}
+        First:     {5}
+        Latest:    {6}
+        """.format(self.releases, self.nukes, self.unnukes, self.deletes, self.undeletes, self.first, self.last)
+
+
+class Group:
+    def __init__(self, group, dict):
+        self.group = group
+        self.releases = dict['releases']
+        self.first = Release(dict['first'])
+        self.last = Release(dict['last'])
+
+    def __str__(self):
+        return """
+        Releases:  {0}
+        First:     {1}
+        Latest:    {2}
+        """.format(self.releases, self.first, self.last)

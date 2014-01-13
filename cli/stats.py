@@ -24,6 +24,9 @@ args = parser.parse_args()
 r = pre.Releases(url, accesskey, verify)
 
 if args.sections:
-    print r.sections()
+    sections = r.sections()
+    if sections:
+        for section in sections:
+            print section
 else:
     print r.stats()
