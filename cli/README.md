@@ -18,8 +18,8 @@ $ python dupe.py --query "the matrix"
 * `-g g, --group g`   Filter results by group name
 * `-s s, --section s` Search within a section, example: "mp3"
 * `-l n, --limit n`   Show N number of releases
-* `-e, --deleted`     *edupe* - Include deleted releases
-* `-r, --oldest`      *rdupe* - Search for the oldest releases
+* `-e, --deleted`     **edupe** - Include deleted releases
+* `-r, --oldest`      **rdupe** - Search for the oldest releases
 
 ## Recent nukes, un-nukes and pres
 
