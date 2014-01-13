@@ -12,7 +12,7 @@ config.read('pre.cfg')
 
 url       = config.get('pre', 'Url')
 accesskey = config.get('pre', 'Accesskey')
-verify    = config.get('pre', 'VerifyCertificate')
+verify    = config.getboolean('pre', 'VerifyCertificate')
 
 
 # command line args

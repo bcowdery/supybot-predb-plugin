@@ -28,7 +28,7 @@ class Pre(callbacks.Plugin):
 
         Perform a search for dupe releases using Pre.im's Web API
         """
-        limit = self.registryValue('limit', msg.args[0])
+        limit = self.registryValue('limit')
         self._dupe(irc, text, limit)
     dupe = wrap(dupe, ['text'])
 
