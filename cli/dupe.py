@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import sys, os
 import ConfigParser, argparse
+import datetime
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'lib'))
 import pre
@@ -39,4 +40,6 @@ elif args.oldest:
 else:
     releases = r.dupe(args.query, section=args.section, group=args.group, limit=args.limit)
 
-print releases
+for i in releases:
+    time = datetime.datetime.fromtimestamp(i['time'])
+    print "[PRE/{0:<10}] {1} [F{2}/{3}MB] [{4}]".format(i['section'], i['release'], i['files'], i['size'], time)
