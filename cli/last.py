@@ -23,6 +23,7 @@ parser.add_argument('-l', '--limit', metavar='n', type=int, default=10, help='Sh
 parser.add_argument('-p', '--pre', dest='pre', action='store_true', help="Show recent pres")
 parser.add_argument('-n', '--nuke', dest='nuke', action='store_true', default=True, help='Show recent nukes')
 parser.add_argument('-un', '--un-nuke', dest='nuke', action='store_false', help='Show recent un-nukes')
+parser.add_argument('--print-reason', dest='reason', action='store_true', help='Print the reason the release was nuked/unnuked.')
 
 args = parser.parse_args()
 
@@ -38,8 +39,11 @@ elif args.nuke:
 else:
     releases = r.lastunnukes(args.group, args.section, args.limit)
 
+
+# print the results
 if releases:
     for r in releases:
         print r
-        if r.nukes:
-            print r.nukes[0]
+        if args.reason:
+            if r.nukes:
+                print r.nukes[0]

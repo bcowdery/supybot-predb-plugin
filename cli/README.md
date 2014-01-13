@@ -35,6 +35,7 @@ $ python last.py [--pre] [--nuke] [--un-nuke]
 * `-p, --pre`         Show recent pres
 * `-n, --nuke`        Show recent nukes
 * `-un, --un-nuke`    Show recent un-nukes
+* `--print-reason`    Print the latest reason this release was nuked/unnuked
 
 ## Group
 
