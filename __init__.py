@@ -1,5 +1,5 @@
 """
-Commands for the PRE.iM Web API
+Pre database lookup commands using the Pre.im web API
 """
 
 import supybot

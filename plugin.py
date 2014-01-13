@@ -1,3 +1,6 @@
+
+from lib import pre
+
 import supybot.log as log
 import supybot.conf as conf
 import supybot.utils as utils
@@ -10,10 +13,8 @@ import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 
-from lib import pre
 
 class Pre(callbacks.Plugin):
-
     def __init__(self):
         accesskey = self.registryValue('accesskey')
         self._predb = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
