@@ -16,11 +16,6 @@ class Releases:
     def __request(self, method, options=None):
         url = urlparse.urljoin(self.url, method)
         r = requests.post(url, data=json.dumps(options), headers=self.__headers(), verify=self.verify)
-
-        print r.request.url
-        print r.request.headers
-        print options
-
         r.raise_for_status()
         if r.text: return json.loads(r.text.split('\n')[-1])
 
