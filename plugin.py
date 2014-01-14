@@ -20,14 +20,14 @@ class Pre(callbacks.Plugin):
         self.__parent.__init__(irc)
 
         accesskey = self.registryValue('accesskey')
-        self._pre = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
+        self._predb = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
 
     def _dupe(self, irc, query, group, section):
         self.log.info("dupe { search: %s, group: %s, section: %s }", query, group, section)
         limit = self.registryValue('limit')
-        releases = self._pre.dupe(query, group, section, limit)
+        releases = self._predb.dupe(query, group, section, limit)
 
-        irc.reply("Found {0} releases matching '{1}', sending a PM ...,".format(len(releases), query))
+        irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), query))
         for release in releases: irc.reply(release, private=True)
 
     def dupe(self, irc, msg, args, optlist, text):
@@ -46,7 +46,7 @@ class Pre(callbacks.Plugin):
 
     def _pre(self, irc, query, group, section):
         self.log.info("pre { search: %s, group: %s, section: %s }", query, group, section)
-        releases = self._pre.dupe(query, group, section, 1)
+        releases = self._predb.dupe(query, group, section, 1)
         for release in releases: irc.reply(release, prefixNick=False)
 
     def pre(self, irc, msg, args, optlist, text):
