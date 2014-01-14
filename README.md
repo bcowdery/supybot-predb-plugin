@@ -6,16 +6,16 @@ Plugin for the supybot IRC bot for checking scene releases against the pre datab
 # Usage
 
 `(dupe [--section s] [--group g] <search>)`
-Search the pre database for all releases matching the search string. You can filter the search results by `--section` (e.g., MP3, X264, TV, TV-HD), and by release `--group`.
+> Search the pre database for all releases matching the search string. You can filter the search results by `--section` (e.g., MP3, X264, TV, TV-HD), and by release `--group`.
 
 `(pre [--section s] [--group g] <search>)`
-Search the pre database for a single releases matching the search string. You can filter the search results by `--section` (e.g., MP3, X264, TV, TV-HD), and by release `--group`. This operation is identical to `dupe`, but only returns a single result.
+> Search the pre database for a single releases matching the search string. You can filter the search results by `--section` (e.g., MP3, X264, TV, TV-HD), and by release `--group`. This operation is identical to `dupe`, but only returns a single result.
 
 `(lastnukes [--section s] [--group g])`
-Show recent releases that have been nuked. You can filter the search results by `--section` (e.g., MP3, X264, TV, TV-HD), and by release `--group`.
+> Show recent releases that have been nuked. You can filter the search results by `--section` (e.g., MP3, X264, TV, TV-HD), and by release `--group`.
 
 `(group <group>)` 
-Fetch information about the first, last and number of releases for a specific group.
+> Fetch information about the first, last and number of releases for a specific group.
 
 
 # Getting Started
@@ -23,12 +23,12 @@ Fetch information about the first, last and number of releases for a specific gr
 ## Installing the plugin
 
     $ cd ./plugins/
-    $ git clone git@github.com:bcowdery/supybot-predupe-check.git Pre
+    $ git clone https://github.com/bcowdery/supybot-predb-plugin.git Pre
 
 ## Configuring
 
 If you create a new bot using `supybot-wizard` after installing the plugin, it should be available to configure
-in the wizard. You'll be asked for the Pre.im accesskey and the limit of results to return from queries (default is 10).
+in the wizard. You'll be asked for the Pre.im accesskey and the limit of results to return from queries. It is recommended you keep the limit low as some commands, like `lastnuke` can be spammy.
 
 You can also configure the plugin manually by editing your bot's config file
 ```conf
