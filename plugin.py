@@ -1,5 +1,7 @@
 
+import os
 from lib import pre
+from Cheetah.Template import Template
 
 import supybot.log as log
 import supybot.conf as conf
@@ -12,6 +14,13 @@ import supybot.ircmsgs as ircmsgs
 import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
+
+
+_release_template = Template(file=os.path.join('templates', 'release.tmpl'))
+def format_release(release):
+    _release_template.r = release
+    return str(_release_template).strip()
+
 
 class Pre(callbacks.Plugin):
     def __init__(self, irc=None):
@@ -40,7 +49,7 @@ class Pre(callbacks.Plugin):
         releases = self._dupe(text, optlist, limit)
         if releases:
             irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
-            for release in releases: irc.reply(release, private=True)
+            for release in releases: irc.reply(format_release(release), private=True)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -56,7 +65,7 @@ class Pre(callbacks.Plugin):
 
         releases = self._dupe(text, optlist, 1)
         if releases:
-            for release in releases: irc.reply(release, prefixNick=False)
+            for release in releases: irc.reply(format_release(release), prefixNick=False)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -100,7 +109,7 @@ class Pre(callbacks.Plugin):
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
             for release in releases:
                 irc.reply(release, private=True)
-                irc.reply(release.last_nuke(), private=True)
+                irc.reply(release.last_nuke, private=True)
         else:
             irc.reply("No nukes.")
     lastnukes = wrap(lastnukes, [getopts({ 'group': 'something', 'section': 'something' })])

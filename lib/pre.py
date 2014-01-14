@@ -130,13 +130,15 @@ class Releases:
 
 class Release:
     def __init__(self, dict):
-        self.release = dict['release']
-        self.section = dict['section']
-        self.genre   = dict['genre']
-        self.files   = dict['files']
-        self.size    = dict['size']
-        self.time    = datetime.datetime.fromtimestamp(dict['time'])
-        self.nukes   = self._nukes(dict['nukes'])
+        self.release   = dict['release']
+        self.section   = dict['section']
+        self.genre     = dict['genre']
+        self.files     = dict['files']
+        self.size      = dict['size']
+        self.time      = datetime.datetime.fromtimestamp(dict['time'])
+        self.nukes     = self._nukes(dict['nukes'])
+        self.last_nuke = self.nukes[0] if self.nukes else None
+        self.status    = self._status()
 
     # Parse nukes, sort by date so the newest is first
     def _nukes(self, list):
@@ -147,24 +149,19 @@ class Release:
             nukes.sort(key=lambda n: n.time)
         return nukes
 
-    # Status of the release, is it nuked?
-    def status(self):
-        if self.nukes:
-            latest = self.last_nuke()
-            if latest.ismodnuke:
+    # Textual status of the release, is it nuked?
+    def _status(self):
+        if self.last_nuke:
+            if self.last_nuke.ismodnuke:
                 return "MODNUKE"
-            elif latest.isnuke:
+            elif self.last_nuke.isnuke:
                 return "NUKED"
             else:
                 return "UNNUKED"
         return "PRE"
 
-    def last_nuke(self):
-        if self.nukes:
-            return self.nukes[0]
-
     def __str__(self):
-        return "[{0}/{1}] {2} [F{3}/{4}MB] [{5}]".format(self.status(), self.section, self.release, self.files, self.size, self.time)
+        return "[{0}/{1}] {2} [F{3}/{4}MB] [{5}]".format(self.status, self.section, self.release, self.files, self.size, self.time)
 
     def __unicode__(self):
         return unicode(self.__str__())
