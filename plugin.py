@@ -115,10 +115,9 @@ class Pre(callbacks.Plugin):
         group = options['group'] if 'group' in options else None
         section = options['section'] if 'section' in options else None
 
+        self.log.info("lastnukes { group: %s, section: %s }", group, section)
+
         limit = self.registryValue('limit')
-
-        self.log.info("lastnukes { group: %s, section: %s, limit: %s }", group, section, limit)
-
         releases = self._predb.lastnukes(group, section, limit)
         if releases:
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
