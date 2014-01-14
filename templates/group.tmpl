@@ -25,6 +25,6 @@
 #set $first = $g.first
 #set $last = $g.last
 
-$group has $releases releases.
+$g.group has $g.releases releases.
 $irc.bold('First:  ') [$irc.bold($first.status)/$first.section] $first.release [$irc.bold('F')$first.files/$first.size$irc.bold('MB')] [$first.time]
 $irc.bold('Latest: ') [$irc.bold($last.status)/$last.section] $last.release [$irc.bold('F')$last.files/$last.size$irc.bold('MB')] [$last.time]

@@ -61,7 +61,9 @@ class Pre(callbacks.Plugin):
         releases = self._dupe(text, optlist, limit)
         if releases:
             irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
-            for release in releases: irc.reply(format_release(release), private=True)
+            for release in releases:
+                messages = format_release(release).split('\n')
+                for message in messages: irc.reply(message, private=True)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -77,7 +79,9 @@ class Pre(callbacks.Plugin):
 
         releases = self._dupe(text, optlist, 1)
         if releases:
-            for release in releases: irc.reply(format_release(release), prefixNick=False)
+            for release in releases:
+                messages = format_release(release).split('\n')
+                for message in messages: irc.reply(message, prefixNick=False)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -93,7 +97,8 @@ class Pre(callbacks.Plugin):
 
         group = self._predb.group(text)
         if group:
-            irc.reply(format_group(group), prefixNick=False)
+            messages = format_group(group).split('\n')
+            for message in messages: irc.reply(message, prefixNick=False)
         else:
             irc.reply("Couldn't find group '{0}'".format(text))
 
@@ -117,7 +122,9 @@ class Pre(callbacks.Plugin):
         releases = self._predb.lastnukes(group, section, limit)
         if releases:
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
-            for release in releases: irc.reply(format_nuke(release), private=True)
+            for release in releases:
+                messages = format_nuke(release).split('\n')
+                for message in messages: irc.reply(message, private=True)
         else:
             irc.reply("No nukes.")
     lastnukes = wrap(lastnukes, [getopts({ 'group': 'something', 'section': 'something' })])
