@@ -161,12 +161,6 @@ class Release:
     def __str__(self):
         return "[{0}/{1}] {2} [F{3}/{4}MB] [{5}]".format(self.status, self.section, self.release, self.files, self.size, self.time)
 
-    def __unicode__(self):
-        return unicode(self.__str__())
-
-    def __repr__(self):
-        return self.__str__()
-
 
 class Nuke:
     def __init__(self, release, dict):
@@ -181,12 +175,6 @@ class Nuke:
         type = "Nuked" if self.isnuke else "Unnuked"
         return "* {0} on {1} [{2}] \n\t{3}".format(type, self.time, self.network, self.reason)
 
-    def __unicode__(self):
-        return unicode(self.__str__())
-
-    def __repr__(self):
-        return self.__str__()
-
 
 class Section:
     def __init__(self, dict):
@@ -195,12 +183,6 @@ class Section:
 
     def __str__(self):
         return "\t{0:<20} \t{1}".format(self.section, self.count)
-
-    def __unicode__(self):
-        return unicode(self.__str__())
-
-    def __repr__(self):
-        return self.__str__()
 
 
 class Stats:
