@@ -27,8 +27,8 @@ class Pre(callbacks.Plugin):
         group = options['group'] if 'group' in options else None
         section = options['section'] if 'section' in options else None
 
-        self.log.info("dupe { search: %s, group: %s, section: %s, limit: %s}", query, group, section, limit)
-        return self._predb.dupe(query, group, section, limit)
+        self.log.info("dupe { search: %s, group: %s, section: %s, limit: %s}", search, group, section, limit)
+        return self._predb.dupe(search, group, section, limit)
 
     def dupe(self, irc, msg, args, optlist, text):
         """[--section s] [--group g] <search>
@@ -41,7 +41,7 @@ class Pre(callbacks.Plugin):
         limit = self.registryValue('limit')
         releases = self._dupe(text, optlist, limit)
         if releases:
-            irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), query))
+            irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
             for release in releases: irc.reply(release, private=True)
         else:
             irc.reply("Couldn't find any releases matching '{1}'")
