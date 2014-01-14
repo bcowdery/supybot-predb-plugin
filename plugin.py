@@ -81,8 +81,8 @@ class Pre(callbacks.Plugin):
 
     group = wrap(group, ['text'])
 
-    def lastnukes(self, irc, msg, args, text):
-        """[--section s] [--group g] [--<search>
+    def lastnukes(self, irc, msg, args, optlist):
+        """[--section s] [--group g]
 
         Show recent nukes up to the configured limit. You can filter search results by
         section and by release group.
@@ -94,9 +94,9 @@ class Pre(callbacks.Plugin):
 
         limit = self.registryValue('limit')
 
-        self.log.info("lastnukes { search: %s, group: %s, section: %s, limit: %s}", search, group, section, limit)
+        self.log.info("lastnukes { group: %s, section: %s, limit: %s}", group, section, limit)
 
-        releases = self._predb.lastnukes(text, group, section, limit)
+        releases = self._predb.lastnukes(group, section, limit)
         if releases:
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
             for release in releases:
@@ -105,6 +105,6 @@ class Pre(callbacks.Plugin):
         else:
             irc.reply("No nukes.")
 
-    lastnukes = wrap(lastnukes, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
+    lastnukes = wrap(lastnukes, [getopts({ 'group': 'something', 'section': 'something' })])
 
 Class = Pre
