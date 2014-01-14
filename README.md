@@ -5,13 +5,17 @@ Plugin for the supybot IRC bot for checking scene releases against the pre datab
 
 # Usage
 
-`(dupe [--section s] [--group g] <search>)` -- Search the pre database for all releases matching the search string. You can filter the search results by --section (e.g., MP3, X264, TV, TV-HD), and by release --group.
+`(dupe [--section s] [--group g] <search>)`
+Search the pre database for all releases matching the search string. You can filter the search results by `--section` (e.g., MP3, X264, TV, TV-HD), and by release `--group`.
 
-`(pre [--section s] [--group g] <search>)` -- Search the pre database for a single releases matching the search string. You can filter the search results by --section (e.g., MP3, X264, TV, TV-HD), and by release --group. This operation is identical to (dupe <search>), but only returns a single result.
+`(pre [--section s] [--group g] <search>)`
+Search the pre database for a single releases matching the search string. You can filter the search results by `--section` (e.g., MP3, X264, TV, TV-HD), and by release `--group`. This operation is identical to `dupe`, but only returns a single result.
 
-`(lastnukes [--section s] [--group g])` -- Show recent releases that have been nuked. You can filter the search results by --section (e.g., MP3, X264, TV, TV-HD), and by release --group.
+`(lastnukes [--section s] [--group g])`
+Show recent releases that have been nuked. You can filter the search results by `--section` (e.g., MP3, X264, TV, TV-HD), and by release `--group`.
 
-`(group <group>)` -- Fetch information about the first, last and number of releases for a specific group.
+`(group <group>)` 
+Fetch information about the first, last and number of releases for a specific group.
 
 
 # Getting Started
