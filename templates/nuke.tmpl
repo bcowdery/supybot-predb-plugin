@@ -39,5 +39,4 @@
 #set $status = "Nuked" if $nuke.isnuke else "Unnuked"
 
 [$irc.bold($r.status)/$r.section] $r.release [$irc.bold('F')$r.files/$r.size$irc.bold('MB')] [$r.time]
-    $status on $nuke.time [$nuke.network]
-        $nuke.reason
+    $status on $nuke.time [$nuke.network], $nuke.reason

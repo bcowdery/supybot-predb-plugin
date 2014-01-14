@@ -21,17 +21,17 @@ TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 _release_template = Template(file=os.path.join(TEMPLATE_DIR, 'release.tmpl'))
 def format_release(release):
     _release_template.r = release
-    return str(_release_template).strip()
+    return str(_release_template).strip().split('\n')
 
 _group_template = Template(file=os.path.join(TEMPLATE_DIR, 'group.tmpl'))
 def format_group(group):
     _group_template.g = group
-    return str(_group_template).strip()
+    return str(_group_template).strip().split('\n')
 
 _nuke_template = Template(file=os.path.join(TEMPLATE_DIR, 'nuke.tmpl'))
 def format_nuke(release):
     _nuke_template.r = release
-    return str(_nuke_template).strip()
+    return str(_nuke_template).strip().split('\n')
 
 
 class Pre(callbacks.Plugin):
@@ -62,7 +62,7 @@ class Pre(callbacks.Plugin):
         if releases:
             irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
             for release in releases:
-                messages = format_release(release).split('\n')
+                messages = format_release(release)
                 for message in messages: irc.reply(message, private=True)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
@@ -80,7 +80,7 @@ class Pre(callbacks.Plugin):
         releases = self._dupe(text, optlist, 1)
         if releases:
             for release in releases:
-                messages = format_release(release).split('\n')
+                messages = format_release(release)
                 for message in messages: irc.reply(message, prefixNick=False)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
@@ -97,7 +97,7 @@ class Pre(callbacks.Plugin):
 
         group = self._predb.group(text)
         if group:
-            messages = format_group(group).split('\n')
+            messages = format_group(group)
             for message in messages: irc.reply(message, prefixNick=False)
         else:
             irc.reply("Couldn't find group '{0}'".format(text))
@@ -123,10 +123,11 @@ class Pre(callbacks.Plugin):
         if releases:
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
             for release in releases:
-                messages = format_nuke(release).split('\n')
+                messages = format_nuke(release)
                 for message in messages: irc.reply(message, private=True)
         else:
             irc.reply("No nukes.")
+
     lastnukes = wrap(lastnukes, [getopts({ 'group': 'something', 'section': 'something' })])
 
 Class = Pre

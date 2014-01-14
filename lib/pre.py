@@ -135,7 +135,7 @@ class Release:
         self.genre     = dict['genre']
         self.files     = dict['files']
         self.size      = dict['size']
-        self.time      = datetime.datetime.fromtimestamp(dict['time'])
+        self.time      = datetime.datetime.utcfromtimestamp(dict['time'])
         self.nukes     = self._nukes(dict['nukes'])
         self.last_nuke = self.nukes[0] if self.nukes else None
         self.status    = self._status()
@@ -175,7 +175,7 @@ class Nuke:
         self.ismodnuke  = dict['ismodnuke']
         self.reason     = dict['reason']
         self.network    = dict['network']
-        self.time       = datetime.datetime.fromtimestamp(dict['time'])
+        self.time       = datetime.datetime.utcfromtimestamp(dict['time'])
 
     def __str__(self):
         type = "Nuked" if self.isnuke else "Unnuked"
