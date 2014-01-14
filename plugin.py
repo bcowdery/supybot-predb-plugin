@@ -43,7 +43,7 @@ class Pre(callbacks.Plugin):
             irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
             for release in releases: irc.reply(release, private=True)
         else:
-            irc.reply("Couldn't find any releases matching '{1}'".format(text))
+            irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
     dupe = wrap(dupe, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
 
@@ -59,7 +59,7 @@ class Pre(callbacks.Plugin):
         if releases:
             for release in releases: irc.reply(release, prefixNick=False)
         else:
-            irc.reply("Couldn't find any releases matching '{1}'".format(text))
+            irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
     pre = wrap(pre, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
 
