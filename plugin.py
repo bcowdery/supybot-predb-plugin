@@ -32,9 +32,8 @@ class Pre(callbacks.Plugin):
     def dupe(self, irc, msg, args, optlist, text):
         """[--section s] [--group g] <search>
 
-        Perform a search of the pre database for releases and returns all matches up to the
-        configured limit. You can filter your search results by section (MP3, X264, etc) and
-        by release group.
+        Search the pre database for all releases matching the search string. You can filter
+        the search results by --section (e.g., MP3, X264, TV, TV-HD), and by release --group.
         """
 
         limit = self.registryValue('limit')
@@ -50,9 +49,9 @@ class Pre(callbacks.Plugin):
     def pre(self, irc, msg, args, optlist, text):
         """[--section s] [--group g] <search>
 
-        Perform a search of the pre database for a single release. You can filter your
-        search results by section (MP3, X264, etc) and by release group. Only returns
-        a single release.
+        Search the pre database for a single releases matching the search string. You can filter
+        the search results by --section (e.g., MP3, X264, TV, TV-HD), and by release --group. This
+        operation is identical to (dupe <search>), but only returns a single result.
         """
 
         releases = self._dupe(text, optlist, 1)
@@ -66,7 +65,7 @@ class Pre(callbacks.Plugin):
     def group(self, irc, msg, args, text):
         """<group>
 
-        Fetch information about the first, last and number of releases for a specific group
+        Fetch information about the first, last and number of releases for a specific group.
         """
 
         self.log.info("group { group: %s }", text)
@@ -84,8 +83,8 @@ class Pre(callbacks.Plugin):
     def lastnukes(self, irc, msg, args, optlist):
         """[--section s] [--group g]
 
-        Show recent nukes up to the configured limit. You can filter search results by
-        section and by release group.
+        Show recent releases that have been nuked. You can filter the search results
+        by --section (e.g., MP3, X264, TV, TV-HD), and by release --group.
         """
 
         options = dict(optlist)
@@ -94,7 +93,7 @@ class Pre(callbacks.Plugin):
 
         limit = self.registryValue('limit')
 
-        self.log.info("lastnukes { group: %s, section: %s, limit: %s}", group, section, limit)
+        self.log.info("lastnukes { group: %s, section: %s, limit: %s }", group, section, limit)
 
         releases = self._predb.lastnukes(group, section, limit)
         if releases:
@@ -104,7 +103,6 @@ class Pre(callbacks.Plugin):
                 irc.reply(release.last_nuke(), private=True)
         else:
             irc.reply("No nukes.")
-
     lastnukes = wrap(lastnukes, [getopts({ 'group': 'something', 'section': 'something' })])
 
 Class = Pre
