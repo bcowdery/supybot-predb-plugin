@@ -13,7 +13,6 @@ import supybot.plugins as plugins
 import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 
-
 class Pre(callbacks.Plugin):
     def __init__(self, irc=None):
         self.__parent = super(Pre, self)
@@ -44,7 +43,7 @@ class Pre(callbacks.Plugin):
             irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
             for release in releases: irc.reply(release, private=True)
         else:
-            irc.reply("Couldn't find any releases matching '{1}'")
+            irc.reply("Couldn't find any releases matching '{1}'".format(text))
 
     dupe = wrap(dupe, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
 
@@ -60,7 +59,7 @@ class Pre(callbacks.Plugin):
         if releases:
             for release in releases: irc.reply(release, prefixNick=False)
         else:
-            irc.reply("Couldn't find any releases matching '{1}'")
+            irc.reply("Couldn't find any releases matching '{1}'".format(text))
 
     pre = wrap(pre, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
 
@@ -69,6 +68,8 @@ class Pre(callbacks.Plugin):
 
         Fetch information about the first, last and number of releases for a specific group
         """
+
+        self.log.info("group { group: %s }", text)
 
         group = self._predb.group(text)
         if group:
@@ -80,5 +81,30 @@ class Pre(callbacks.Plugin):
 
     group = wrap(group, ['text'])
 
+    def lastnukes(self, irc, msg, args, text):
+        """[--section s] [--group g] [--<search>
+
+        Show recent nukes up to the configured limit. You can filter search results by
+        section and by release group.
+        """
+
+        options = dict(optlist)
+        group = options['group'] if 'group' in options else None
+        section = options['section'] if 'section' in options else None
+
+        limit = self.registryValue('limit')
+
+        self.log.info("lastnukes { search: %s, group: %s, section: %s, limit: %s}", search, group, section, limit)
+
+        releases = self._predb.lastnukes(text, group, section, limit)
+        if releases:
+            irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
+            for release in releases:
+                irc.reply(release, private=True)
+                irc.reply(release.last_nuke(), private=True)
+        else:
+            irc.reply("No nukes.")
+
+    lastnukes = wrap(lastnukes, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
 
 Class = Pre
