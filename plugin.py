@@ -24,29 +24,25 @@ class Pre(callbacks.Plugin):
 
     def _dupe(self, irc, query, group, section):
         limit = self.registryValue('limit')
-        releases = self._pre.dupe(query, group, section, limit)
 
-        for release in releases:
-            irc.reply(release)
+        self.log.info("Querying releases { search: %s, group: %s, section: %s, limit: %s }", query, group, section, limit)
+
+        releases = self._pre.dupe(query, group, section, limit)
+        for release in releases: irc.reply(release)
 
     def dupe(self, irc, msg, args, optlist, text):
-        """<search> [--section <section>] [--group <group>]
+        """[--section s] [--group g] <search>
 
         Perform a search of the pre database for releases. You can filter your
-        search results by section (MP3, X264, etc) using --section and by group
-        name using the --group option.
+        search results by section (MP3, X264, etc) using --section and --group.
         """
 
-        print optlist
-
-        section = optlist['section'] if 'section' in optlist else None
-        group = optlist['group'] if 'group' in optlist else None
-
-        print section
-        print group
-
+        options = dict(optlist)
+        group = options['group'] if 'group' in options else None
+        section = options['section'] if 'section' in options else None
         self._dupe(irc, text, group, section)
 
-    dupe = wrap(dupe, [getopts({ 'section': None, 'group': None }), 'text'])
+    dupe = wrap(dupe, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
+
 
 Class = Pre
