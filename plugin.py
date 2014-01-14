@@ -22,13 +22,13 @@ class Pre(callbacks.Plugin):
         accesskey = self.registryValue('accesskey')
         self._predb = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
 
-    def _dupe(self, irc, query, group, section):
-        self.log.info("dupe { search: %s, group: %s, section: %s }", query, group, section)
-        limit = self.registryValue('limit')
-        releases = self._predb.dupe(query, group, section, limit)
+    def _dupe(self, search, optlist, limit):
+        options = dict(optlist)
+        group = options['group'] if 'group' in options else None
+        section = options['section'] if 'section' in options else None
 
-        irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), query))
-        for release in releases: irc.reply(release, private=True)
+        self.log.info("dupe { search: %s, group: %s, section: %s, limit: %s}", query, group, section, limit)
+        return self._predb.dupe(query, group, section, limit)
 
     def dupe(self, irc, msg, args, optlist, text):
         """[--section s] [--group g] <search>
@@ -38,29 +38,47 @@ class Pre(callbacks.Plugin):
         by release group.
         """
 
-        options = dict(optlist)
-        group = options['group'] if 'group' in options else None
-        section = options['section'] if 'section' in options else None
-        self._dupe(irc, text, group, section)
-    dupe = wrap(dupe, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
+        limit = self.registryValue('limit')
+        releases = self._dupe(text, optlist, limit)
+        if releases:
+            irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), query))
+            for release in releases: irc.reply(release, private=True)
+        else:
+            irc.reply("Couldn't find any releases matching '{1}'")
 
-    def _pre(self, irc, query, group, section):
-        self.log.info("pre { search: %s, group: %s, section: %s }", query, group, section)
-        releases = self._predb.dupe(query, group, section, 1)
-        for release in releases: irc.reply(release, prefixNick=False)
+    dupe = wrap(dupe, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
 
     def pre(self, irc, msg, args, optlist, text):
         """[--section s] [--group g] <search>
 
-        Perform a search of the pre database for a release. You can filter your
+        Perform a search of the pre database for a single release. You can filter your
         search results by section (MP3, X264, etc) and by release group. Only returns
         a single release.
         """
 
-        options = dict(optlist)
-        group = options['group'] if 'group' in options else None
-        section = options['section'] if 'section' in options else None
-        self._pre(irc, text, group, section)
+        releases = self._dupe(text, optlist, 1)
+        if releases:
+            for release in releases: irc.reply(release, prefixNick=False)
+        else:
+            irc.reply("Couldn't find any releases matching '{1}'")
+
     pre = wrap(pre, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
+
+    def group(self, irc, msg, args, text):
+        """<group>
+
+        Fetch information about the first, last and number of releases for a specific group
+        """
+
+        group = self._predb.group(text)
+        if group:
+            irc.reply("{0} has {1} releases".format(text, group.releases), prefixNick=False)
+            irc.reply("First:  {0}".format(group.first), prefixNick=False)
+            irc.reply("Latest: {0}".format(group.last), prefixNick=False)
+        else:
+            irc.reply("Couldn't find group '{0}'".format(text))
+
+    group = wrap(group, ['text'])
+
 
 Class = Pre
