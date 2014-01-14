@@ -16,10 +16,22 @@ import supybot.ircutils as ircutils
 import supybot.callbacks as callbacks
 
 
-_release_template = Template(file=os.path.join('templates', 'release.tmpl'))
+TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
+
+_release_template = Template(file=os.path.join(TEMPLATE_DIR, 'release.tmpl'))
 def format_release(release):
     _release_template.r = release
     return str(_release_template).strip()
+
+_group_template = Template(file=os.path.join(TEMPLATE_DIR, 'group.tmpl'))
+def format_group(group):
+    _group_template.g = group
+    return str(_group_template).strip()
+
+_nuke_template = Template(file=os.path.join(TEMPLATE_DIR, 'nuke.tmpl'))
+def format_nuke(release):
+    _nuke_template.r = release
+    return str(_nuke_template).strip()
 
 
 class Pre(callbacks.Plugin):
@@ -81,9 +93,7 @@ class Pre(callbacks.Plugin):
 
         group = self._predb.group(text)
         if group:
-            irc.reply("{0} has {1} releases".format(text, group.releases), prefixNick=False)
-            irc.reply("First:  {0}".format(group.first), prefixNick=False)
-            irc.reply("Latest: {0}".format(group.last), prefixNick=False)
+            irc.reply(format_group(group), prefixNick=False)
         else:
             irc.reply("Couldn't find group '{0}'".format(text))
 
@@ -107,9 +117,7 @@ class Pre(callbacks.Plugin):
         releases = self._predb.lastnukes(group, section, limit)
         if releases:
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
-            for release in releases:
-                irc.reply(release, private=True)
-                irc.reply(release.last_nuke, private=True)
+            for release in releases: irc.reply(format_nuke(release), private=True)
         else:
             irc.reply("No nukes.")
     lastnukes = wrap(lastnukes, [getopts({ 'group': 'something', 'section': 'something' })])

@@ -1,0 +1,30 @@
+#import supybot.ircutils as irc
+##
+## doc: Template for rendering pre Group objects as formatted strings.
+##  
+## pre.Group:
+##      $g.group      release name
+##      $g.releases   number of releases for this group
+##      $g.first      first release as a pre.Release object
+##      $g.last       last, most recent release as a pre.Release object
+##
+## $irc.bold(s)        
+##      * returns the string s, bolded.
+##
+## $irc.reverse(s)     
+##      * returns the string s, with inverted forground and background colors.
+##
+## $irc.underline(s)   
+##      * returns the string s, underlined.
+##
+## $irc.mircColor(s, fg=None, bg=None)
+##      * returns the string s with the given mIRC color codes applied.
+##      * see http://www.mirc.com/colors.html
+##
+
+#set $first = $g.first
+#set $last = $g.last
+
+$group has $releases releases.
+$irc.bold('First:  ') [$irc.bold($first.status)/$first.section] $first.release [$irc.bold('F')$first.files/$first.size$irc.bold('MB')] [$first.time]
+$irc.bold('Latest: ') [$irc.bold($last.status)/$last.section] $last.release [$irc.bold('F')$last.files/$last.size$irc.bold('MB')] [$last.time]

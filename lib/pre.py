@@ -152,9 +152,7 @@ class Release:
     # Textual status of the release, is it nuked?
     def _status(self):
         if self.last_nuke:
-            if self.last_nuke.ismodnuke:
-                return "MODNUKE"
-            elif self.last_nuke.isnuke:
+            if self.last_nuke.isnuke:
                 return "NUKED"
             else:
                 return "UNNUKED"

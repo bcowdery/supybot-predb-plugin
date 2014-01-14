@@ -63,12 +63,12 @@ supybot.plugins.Pre.limit: 10
 # Python dependencies
 
 * [requests](http://docs.python-requests.org/)
+* [Cheetah](http://www.cheetahtemplate.org/)
 
 **Installation:**
 ```
 $ pip install requests
-or
-$ easy_install requests
+$ pip install cheetah
 ```
 
 # Documentation:
