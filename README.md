@@ -1,5 +1,5 @@
-Supybot Pre Dupe Check
-======================
+Supybot Pre.im Plugin
+=====================
 
 Plugin for the supybot IRC bot for checking scene releases against the pre database.
 
@@ -67,16 +67,13 @@ supybot.plugins.Pre.limit: 10
 **Installation:**
 ```
 $ pip install requests
-
 or
-
 $ easy_install requests
 ```
 
 # Documentation:
 
 * [PRE.iM API Documentation](https://pre.im/doku/index.htm)
-
 
 # License
 
