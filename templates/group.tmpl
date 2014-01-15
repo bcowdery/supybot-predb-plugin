@@ -28,5 +28,5 @@
 #set $last = $g.last
 
 $g.group has $g.releases releases.
-$irc.bold('First:  ') [$util.status($first)/$first.section] $first.release [$first.age()] [$util.files($first)] [$first.time]
-$irc.bold('Latest: ') [$util.status($last)/$last.section] $last.release [$last.age()] [$util.files($last)] [$last.time]
+$irc.bold('First:  ') [$util.status($first)/$first.section] $first.release [$util.age($first)] [$util.files($first)] [$first.time]
+$irc.bold('Latest: ') [$util.status($last)/$last.section] $last.release [$util.age($last)] [$util.files($last)] [$last.time]

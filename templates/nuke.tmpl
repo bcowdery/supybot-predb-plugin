@@ -40,5 +40,5 @@
 #set $nuke = $r.last_nuke()
 #set $status = "Nuked" if $nuke.isnuke else "Unnuked"
 
-[$util.status($r)/$r.section] $r.release [$r.age()] [$util.files($r)] [$r.time]
+[$util.status($r)/$r.section] $r.release [$util.age($r)] [$util.files($r)] [$r.time]
     $status on $nuke.time [$nuke.network] -- $nuke.reason

@@ -173,8 +173,6 @@ class Release:
             hours, seconds = divmod(seconds, 3600)
             minutes, seconds = divmod(seconds, 60)
             return "%dd %dh %dmi %ds" % (days, hours, minutes, seconds)
-
-        # release is from the future (or unknown), show zero's
         return "0d 0h 0mi 0s"
 
     def __str__(self):
