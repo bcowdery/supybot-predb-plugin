@@ -121,7 +121,7 @@ class Pre(callbacks.Plugin):
         may be possible to download the NFO file from the viewer.
         """
 
-        self.log.info("nfo { search: %s }")
+        self.log.info("nfo { search: %s }".format(text))
 
         url = self._predb.nfo(text)
         if url:
