@@ -1,4 +1,5 @@
 #import supybot.ircutils as irc
+#import util
 ##
 ## doc: Template for rendering pre Group objects as formatted strings.
 ##      Used by the (group) command
@@ -27,5 +28,5 @@
 #set $last = $g.last
 
 $g.group has $g.releases releases.
-$irc.bold('First:  ') [$irc.bold($first.status())/$first.section] $first.release [$first.age()] [$irc.bold('F')$first.files/$first.size$irc.bold('MB')] [$first.time]
-$irc.bold('Latest: ') [$irc.bold($last.status())/$last.section] $last.release [$last.age()] [$irc.bold('F')$last.files/$last.size$irc.bold('MB')] [$last.time]
+$irc.bold('First:  ') [$util.status($first)/$first.section] $first.release [$first.age()] [$util.files($first)] [$first.time]
+$irc.bold('Latest: ') [$util.status($last)/$last.section] $last.release [$last.age()] [$util.files($last)] [$last.time]

@@ -1,4 +1,5 @@
 #import supybot.ircutils as irc
+#import util
 ##
 ## doc: Template for rendering pre Release and Nuke objects as formatted strings.
 ##      Used by the (lastnuke) command
@@ -39,5 +40,5 @@
 #set $nuke = $r.last_nuke()
 #set $status = "Nuked" if $nuke.isnuke else "Unnuked"
 
-[$irc.bold($r.status())/$r.section] $r.release [$r.age()] [$irc.bold('F')$r.files/$r.size$irc.bold('MB')] [$r.time]
+[$util.status($r)/$r.section] $r.release [$r.age()] [$util.files($r)] [$r.time]
     $status on $nuke.time [$nuke.network] -- $nuke.reason
