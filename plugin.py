@@ -62,7 +62,7 @@ class Pre(callbacks.Plugin):
         """
 
         options = Options(optlist)
-        self.log.info("dupe { search: %s, group: %s, section: %s }", search, options.group, options.section)
+        self.log.info("dupe { search: %s, group: %s, section: %s }", text, options.group, options.section)
 
         releases = self._predb.dupe(text, options.group, options.section, self.limit)
         if releases:
@@ -83,7 +83,7 @@ class Pre(callbacks.Plugin):
         """
         
         options = Options(optlist)
-        self.log.info("pre { search: %s, group: %s, section: %s }", search, options.group, options.section)
+        self.log.info("pre { search: %s, group: %s, section: %s }", text, options.group, options.section)
 
         releases = self._predb.dupe(text, options.group, options.section, 1)
         if releases:
