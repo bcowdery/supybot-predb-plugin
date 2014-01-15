@@ -114,6 +114,24 @@ class Pre(callbacks.Plugin):
     group = wrap(group, ['text'])
 
 
+    def nfo(self, irc, msg, args, text):
+        """<release>
+
+        Searches for a release and returns a URL to the PreDB NFO Viewer. Depending on your API key it
+        may be possible to download the NFO file from the viewer.
+        """
+
+        self.log.info("nfo { search: %s }")
+
+        url = self._predb.nfo(text)
+        if url:
+            irc.reply("NFO: {0}".format(url))
+        else:
+            irc.reply("Sorry, couldn't find an NFO for '{0}'".format(text))
+
+    nfo = wrap(nfo, ['text'])
+
+
     def lastnukes(self, irc, msg, args, optlist):
         """[--section s] [--group g]
 
