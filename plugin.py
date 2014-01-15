@@ -34,25 +34,25 @@ def format_nuke(release):
     return str(_nuke_template).strip()
 
 
+class Options():
+    def __init__(self, optlist):
+        options = dict(optlist)                
+        self.group = options['group'] if 'group' in options else None
+        self.section = options['section'] if 'section' in options else None        
+
+
 class Pre(callbacks.Plugin):
     def __init__(self, irc=None):
         self.__parent = super(Pre, self)
         self.__parent.__init__(irc)
 
-        accesskey = self.registryValue('accesskey')
-        self._predb = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
+        self.limit = self.registryValue('limit')
+        self.accesskey = self.registryValue('accesskey')
+        self._predb = pre.Releases('https://api.pre.im/v1.0/', self.accesskey, False)
 
     def _reply(self, message, prefixNick=None, private=None):
         for line in message.split('\n'):
             irc.reply(line, private=private, prefixNick=prefixNick)   
-
-    def _dupe(self, search, optlist, limit):
-        options = dict(optlist)
-        group = options['group'] if 'group' in options else None
-        section = options['section'] if 'section' in options else None
-
-        self.log.info("dupe { search: %s, group: %s, section: %s, limit: %s}", search, group, section, limit)
-        return self._predb.dupe(search, group, section, limit)
 
     def dupe(self, irc, msg, args, optlist, text):
         """[--section s] [--group g] <search>
@@ -61,8 +61,10 @@ class Pre(callbacks.Plugin):
         the search results by --section (e.g., MP3, X264, TV, TV-HD), and by release --group.
         """
 
-        limit = self.registryValue('limit')
-        releases = self._dupe(text, optlist, limit)
+        options = Options(optlist)
+        self.log.info("dupe { search: %s, group: %s, section: %s }", search, options.group, options.section)
+
+        releases = self._predb.dupe(text, options.group, options.section, self.limit)
         if releases:
             irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
             for release in releases: 
@@ -79,8 +81,11 @@ class Pre(callbacks.Plugin):
         the search results by --section (e.g., MP3, X264, TV, TV-HD), and by release --group. This
         operation is identical to (dupe <search>), but only returns a single result.
         """
+        
+        options = Options(optlist)
+        self.log.info("pre { search: %s, group: %s, section: %s }", search, options.group, options.section)
 
-        releases = self._dupe(text, optlist, 1)
+        releases = self._predb.dupe(text, options.group, options.section, 1)
         if releases:
             for release in releases: 
                 self._reply(format_release(release), prefixNick=False)
@@ -111,16 +116,11 @@ class Pre(callbacks.Plugin):
         Show recent releases that have been nuked. You can filter the search results
         by --section (e.g., MP3, X264, TV, TV-HD), and by release --group.
         """
-
-        # todo: repeated, can be moved into a parse opts function
-        options = dict(optlist)
-        group = options['group'] if 'group' in options else None
-        section = options['section'] if 'section' in options else None
-
-        self.log.info("lastnukes { group: %s, section: %s }", group, section)
-
-        limit = self.registryValue('limit')
-        releases = self._predb.lastnukes(group, section, limit)
+        
+        options = Options(optlist)
+        self.log.info("lastnukes { group: %s, section: %s }", options.group, options.section)
+        
+        releases = self._predb.lastnukes(options.group, options.section, self.limit)
         if releases:
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
             for release in releases:
