@@ -18,5 +18,5 @@ def status(r):
         if latest.isnuke:
             return irc.bold(irc.mircColor('NUKED', fg=7))
         else:
-            return irc.bold(irc.mircCololor('UNNUKED', fg=3))
+            return irc.bold(irc.mircColor('UNNUKED', fg=3))
     return irc.bold('PRE')
