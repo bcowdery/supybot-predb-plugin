@@ -30,4 +30,6 @@
 ##      * see http://www.mirc.com/colors.html
 ##
 
+#for $r in $releases
 [$util.status($r)/$r.section] $r.release [$util.age($r)] [$util.files($r)] [$r.time]
+#end for

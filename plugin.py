@@ -20,23 +20,24 @@ TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 sys.path.append(TEMPLATE_DIR)
 
 _release_template = Template(file=os.path.join(TEMPLATE_DIR, 'release.tmpl'))
-def format_release(release):
-    _release_template.r = release
+def format_releases(releases):
+    _release_template.releases = releases
     return str(_release_template).strip()
+
+_nuke_template = Template(file=os.path.join(TEMPLATE_DIR, 'nuke.tmpl'))
+def format_nukes(releases):
+    _nuke_template.releases = releases
+    return str(_nuke_template).strip()
 
 _group_template = Template(file=os.path.join(TEMPLATE_DIR, 'group.tmpl'))
 def format_group(group):
     _group_template.g = group
     return str(_group_template).strip()
 
-_nuke_template = Template(file=os.path.join(TEMPLATE_DIR, 'nuke.tmpl'))
-def format_nuke(release):
-    _nuke_template.r = release
-    return str(_nuke_template).strip()
-
-def write(irc, message, prefixNick=None, private=None):
-    for line in message.split('\n'):
-        irc.reply(line, prefixNick=prefixNick, private=private)
+def write(irc, message, prefixNick=None, private=None):    
+    if message:
+        for line in message.split('\n'):
+            if line: irc.reply(line, prefixNick=prefixNick, private=private)
 
 
 class Options():
@@ -68,9 +69,8 @@ class Pre(callbacks.Plugin):
 
         releases = self._predb.dupe(text, options.group, options.section, self.limit)
         if releases:
-            irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
-            for release in releases: 
-                write(irc, format_release(release), private=True)                
+            irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))            
+            write(irc, format_releases(releases), private=True)                
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -90,8 +90,7 @@ class Pre(callbacks.Plugin):
 
         releases = self._predb.dupe(text, options.group, options.section, 1)
         if releases:
-            for release in releases: 
-                write(irc, format_release(release), prefixNick=False)
+            write(irc, format_releases(releases), prefixNick=False)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -145,9 +144,8 @@ class Pre(callbacks.Plugin):
         
         releases = self._predb.lastnukes(options.group, options.section, self.limit)
         if releases:
-            irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
-            for release in releases: 
-                write(irc, format_nuke(release), private=True)
+            irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))            
+            write(irc, format_nukes(releases), private=True)
         else:
             irc.reply("No recent nukes found.")
 
@@ -167,8 +165,7 @@ class Pre(callbacks.Plugin):
         releases = self._predb.lastunnukes(options.group, options.section, self.limit)
         if releases:
             irc.reply("Sending last {0} un-nukes in a PM ...".format(len(releases)))
-            for release in releases: 
-                write(irc, format_nuke(release), private=True)
+            write(irc, format_nukes(releases), private=True)
         else:
             irc.reply("No recent un-nukes found.")
 
@@ -187,9 +184,8 @@ class Pre(callbacks.Plugin):
         
         releases = self._predb.lastpres(options.section, self.limit)
         if releases:
-            irc.reply("Sending last {0} pres in a PM ...".format(len(releases)))
-            for release in releases: 
-                write(irc, format_release(release), private=True)
+            irc.reply("Sending last {0} pres in a PM ...".format(len(releases)))            
+            write(irc, format_releases(releases), private=True)
         else:
             irc.reply("No recent pres found.")
 
