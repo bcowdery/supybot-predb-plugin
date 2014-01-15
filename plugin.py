@@ -49,8 +49,8 @@ class Pre(callbacks.Plugin):
         self.limit = self.registryValue('limit')
         self.accesskey = self.registryValue('accesskey')
         self._predb = pre.Releases('https://api.pre.im/v1.0/', self.accesskey, False)
-
-    def _reply(self, message, prefixNick=None, private=None):
+    
+    def _reply(self, irc, message, prefixNick=None, private=None):
         for line in message.split('\n'):
             irc.reply(line, private=private, prefixNick=prefixNick)   
 
@@ -68,7 +68,7 @@ class Pre(callbacks.Plugin):
         if releases:
             irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
             for release in releases: 
-                self._reply(format_release(release), private=True)                
+                self._reply(irc, format_release(release), private=True)                
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -81,14 +81,14 @@ class Pre(callbacks.Plugin):
         the search results by --section (e.g., MP3, X264, TV, TV-HD), and by release --group. This
         operation is identical to (dupe <search>), but only returns a single result.
         """
-        
+
         options = Options(optlist)
         self.log.info("pre { search: %s, group: %s, section: %s }", text, options.group, options.section)
 
         releases = self._predb.dupe(text, options.group, options.section, 1)
         if releases:
             for release in releases: 
-                self._reply(format_release(release), prefixNick=False)
+                self._reply(irc, format_release(release), prefixNick=False)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -104,7 +104,7 @@ class Pre(callbacks.Plugin):
 
         group = self._predb.group(text)
         if group:
-            self._reply(format_group(group), prefixNick=False)
+            self._reply(irc, format_group(group), prefixNick=False)
         else:
             irc.reply("Couldn't find group '{0}'".format(text))
 
@@ -124,7 +124,7 @@ class Pre(callbacks.Plugin):
         if releases:
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
             for release in releases:
-                self._reply(format_nuke(release), private=True)
+                self._reply(irc, format_nuke(release), private=True)
         else:
             irc.reply("No nukes.")
 
