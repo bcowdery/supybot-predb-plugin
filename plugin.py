@@ -109,7 +109,7 @@ class Pre(callbacks.Plugin):
         if group:
             write(irc, format_group(group), prefixNick=False)
         else:
-            irc.reply("Couldn't find group '{0}'", text)
+            irc.reply("Couldn't find group '{0}'".format(text))
 
     group = wrap(group, ['text'])
 
@@ -121,7 +121,7 @@ class Pre(callbacks.Plugin):
         may be possible to download the NFO file from the viewer.
         """
 
-        self.log.info("nfo { search: %s }".format(text))
+        self.log.info("nfo { search: %s }", text)
 
         url = self._predb.nfo(text)
         if url:
