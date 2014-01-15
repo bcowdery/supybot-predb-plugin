@@ -1,6 +1,18 @@
 import urlparse, requests, json
 import datetime
 
+
+def to_releases(list):
+    if list:
+        return [Release(r) for r in list ]
+    return []
+
+def to_sections(list):
+    if list:
+        return [ Section(s) for s in list ]
+    return []          
+
+
 class Releases:
     def __init__(self, url='https://api.pre.im/v1.0/', accesskey=None, verify=True):
         self.url       = url
@@ -20,10 +32,6 @@ class Releases:
         r.raise_for_status()
         if r.text: return json.loads(r.text.split('\n')[-1])
 
-    def _as_releases(self, list):
-        if list: return [ Release(r) for r in list ]
-        return []
-
 
     # Pre.IM Web API methods
 
@@ -37,7 +45,7 @@ class Releases:
         if section: options['section'] = section
         if limit:   options['limit'] = limit
         r = self._request('dupe', options)
-        return self._as_releases(r);
+        return to_releases(r);
 
     def edupe(self, query, group=None, section=None, limit=None):
         """
@@ -49,7 +57,7 @@ class Releases:
         if section: options['section'] = section
         if limit:   options['limit'] = limit
         r = self._request('edupe', options)
-        return self._as_releases(r)
+        return to_releases(r)
 
     def rdupe(self, query, group=None, section=None, limit=None):
         """
@@ -60,7 +68,7 @@ class Releases:
         if section: options['section'] = section
         if limit:   options['limit'] = limit
         r = self._request('rdupe', options)
-        return self._as_releases(r)
+        return to_releases(r)
 
     def group(self, group):
         """
@@ -78,7 +86,7 @@ class Releases:
         if section: options['section'] = section
         if limit:   options['limit'] = limit
         r = self._request('lastnukes', options)
-        return self._as_releases(r);
+        return to_releases(r);
 
     def lastpres(self, section=None, limit=None):
         """
@@ -88,7 +96,7 @@ class Releases:
         if section: options['section'] = section
         if limit:   options['limit'] = limit
         r = self._request('lastpres', options)
-        return self._as_releases(r);
+        return to_releases(r);
 
     def lastunnukes(self, group=None, section=None, limit=None):
         """
@@ -99,7 +107,7 @@ class Releases:
         if section: options['section'] = section
         if limit:   options['limit'] = limit
         r = self._request('lastunnukes', options)
-        return self._as_releases(r);
+        return to_releases(r);
 
     def nfo(self, search):
         """
@@ -113,10 +121,7 @@ class Releases:
         Returns a list of all sections in the pre database.
         """
         r = self._request('sections')
-        sections = []
-        for sect in r:
-            sections += [ Section(sect) ]
-        return sections
+        return to_sections(r)
 
     def stats(self):
         """

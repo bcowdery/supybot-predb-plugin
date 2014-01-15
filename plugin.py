@@ -33,11 +33,15 @@ def format_nuke(release):
     _nuke_template.r = release
     return str(_nuke_template).strip()
 
+def write(irc, message, prefixNick=None, private=None):
+    for line in message.split('\n'):
+        irc.reply(line, prefixNick=prefixNick, private=private)
+
 
 class Options():
     def __init__(self, optlist):
         options = dict(optlist)                
-        self.group = options['group'] if 'group' in options else None
+        self.group   = options['group'] if 'group' in options else None
         self.section = options['section'] if 'section' in options else None        
 
 
@@ -50,9 +54,6 @@ class Pre(callbacks.Plugin):
         self.accesskey = self.registryValue('accesskey')
         self._predb = pre.Releases('https://api.pre.im/v1.0/', self.accesskey, False)
     
-    def _reply(self, irc, message, prefixNick=None, private=None):
-        for line in message.split('\n'):
-            irc.reply(line, private=private, prefixNick=prefixNick)   
 
     def dupe(self, irc, msg, args, optlist, text):
         """[--section s] [--group g] <search>
@@ -68,11 +69,12 @@ class Pre(callbacks.Plugin):
         if releases:
             irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
             for release in releases: 
-                self._reply(irc, format_release(release), private=True)                
+                write(irc, format_release(release), private=True)                
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
     dupe = wrap(dupe, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
+
 
     def pre(self, irc, msg, args, optlist, text):
         """[--section s] [--group g] <search>
@@ -88,11 +90,12 @@ class Pre(callbacks.Plugin):
         releases = self._predb.dupe(text, options.group, options.section, 1)
         if releases:
             for release in releases: 
-                self._reply(irc, format_release(release), prefixNick=False)
+                write(irc, format_release(release), prefixNick=False)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
     pre = wrap(pre, [getopts({ 'group': 'something', 'section': 'something' }), 'text'])
+
 
     def group(self, irc, msg, args, text):
         """<group>
@@ -104,11 +107,12 @@ class Pre(callbacks.Plugin):
 
         group = self._predb.group(text)
         if group:
-            self._reply(irc, format_group(group), prefixNick=False)
+            write(irc, format_group(group), prefixNick=False)
         else:
             irc.reply("Couldn't find group '{0}'".format(text))
 
     group = wrap(group, ['text'])
+
 
     def lastnukes(self, irc, msg, args, optlist):
         """[--section s] [--group g]
@@ -123,8 +127,8 @@ class Pre(callbacks.Plugin):
         releases = self._predb.lastnukes(options.group, options.section, self.limit)
         if releases:
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
-            for release in releases:
-                self._reply(irc, format_nuke(release), private=True)
+            for release in releases: 
+                write(irc, format_nuke(release), private=True)
         else:
             irc.reply("No nukes.")
 
