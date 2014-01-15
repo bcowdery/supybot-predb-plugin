@@ -148,8 +148,50 @@ class Pre(callbacks.Plugin):
             for release in releases: 
                 write(irc, format_nuke(release), private=True)
         else:
-            irc.reply("No nukes.")
+            irc.reply("No recent nukes found.")
 
     lastnukes = wrap(lastnukes, [getopts({ 'group': 'something', 'section': 'something' })])
+
+
+    def lastunnukes(self, irc, msg, args, optlist):
+        """[--section s] [--group g]
+
+        Show recent releases that have been un-nuked. You can filter the search results
+        by --section (e.g., MP3, X264, TV, TV-HD), and by release --group.
+        """
+        
+        options = Options(optlist)
+        self.log.info("lastunnukes { group: %s, section: %s }", options.group, options.section)
+        
+        releases = self._predb.lastunnukes(options.group, options.section, self.limit)
+        if releases:
+            irc.reply("Sending last {0} un-nukes in a PM ...".format(len(releases)))
+            for release in releases: 
+                write(irc, format_nuke(release), private=True)
+        else:
+            irc.reply("No recent un-nukes found.")
+
+    lastunnukes = wrap(lastunnukes, [getopts({ 'group': 'something', 'section': 'something' })])
+
+
+    def lastpres(self, irc, msg, args, optlist):
+        """[--section s]
+
+        Show recent releases that have been pred. You can filter the search results
+        by --section (e.g., MP3, X264, TV, TV-HD).
+        """
+        
+        options = Options(optlist)
+        self.log.info("lastpres { section: %s }", options.section)
+        
+        releases = self._predb.lastpres(options.section, self.limit)
+        if releases:
+            irc.reply("Sending last {0} pres in a PM ...".format(len(releases)))
+            for release in releases: 
+                write(irc, format_release(release), private=True)
+        else:
+            irc.reply("No recent pres found.")
+
+    lastpres = wrap(lastpres, [getopts({ 'section': 'something' })])
 
 Class = Pre
