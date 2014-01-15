@@ -109,7 +109,7 @@ class Pre(callbacks.Plugin):
         if group:
             write(irc, format_group(group), prefixNick=False)
         else:
-            irc.reply("Couldn't find group '{0}'".format(text))
+            irc.reply("Couldn't find group '{0}'", text)
 
     group = wrap(group, ['text'])
 
