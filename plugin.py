@@ -21,17 +21,17 @@ TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
 _release_template = Template(file=os.path.join(TEMPLATE_DIR, 'release.tmpl'))
 def format_release(release):
     _release_template.r = release
-    return str(_release_template).strip().split('\n')
+    return str(_release_template).strip()
 
 _group_template = Template(file=os.path.join(TEMPLATE_DIR, 'group.tmpl'))
 def format_group(group):
     _group_template.g = group
-    return str(_group_template).strip().split('\n')
+    return str(_group_template).strip()
 
 _nuke_template = Template(file=os.path.join(TEMPLATE_DIR, 'nuke.tmpl'))
 def format_nuke(release):
     _nuke_template.r = release
-    return str(_nuke_template).strip().split('\n')
+    return str(_nuke_template).strip()
 
 
 class Pre(callbacks.Plugin):
@@ -41,6 +41,10 @@ class Pre(callbacks.Plugin):
 
         accesskey = self.registryValue('accesskey')
         self._predb = pre.Releases('https://api.pre.im/v1.0/', accesskey, False)
+
+    def _reply(self, message, prefixNick=None, private=None):
+        for line in message.split('\n'):
+            irc.reply(line, private=private, prefixNick=prefixNick)   
 
     def _dupe(self, search, optlist, limit):
         options = dict(optlist)
@@ -61,9 +65,8 @@ class Pre(callbacks.Plugin):
         releases = self._dupe(text, optlist, limit)
         if releases:
             irc.reply("Found {0} releases matching '{1}', sending a PM ...".format(len(releases), text))
-            for release in releases:
-                messages = format_release(release)
-                for message in messages: irc.reply(message, private=True)
+            for release in releases: 
+                self._reply(format_release(release), private=True)                
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -79,9 +82,8 @@ class Pre(callbacks.Plugin):
 
         releases = self._dupe(text, optlist, 1)
         if releases:
-            for release in releases:
-                messages = format_release(release)
-                for message in messages: irc.reply(message, prefixNick=False)
+            for release in releases: 
+                self._reply(format_release(release), prefixNick=False)
         else:
             irc.reply("Couldn't find any releases matching '{0}'".format(text))
 
@@ -97,8 +99,7 @@ class Pre(callbacks.Plugin):
 
         group = self._predb.group(text)
         if group:
-            messages = format_group(group)
-            for message in messages: irc.reply(message, prefixNick=False)
+            self._reply(format_group(group), prefixNick=False)
         else:
             irc.reply("Couldn't find group '{0}'".format(text))
 
@@ -111,6 +112,7 @@ class Pre(callbacks.Plugin):
         by --section (e.g., MP3, X264, TV, TV-HD), and by release --group.
         """
 
+        # todo: repeated, can be moved into a parse opts function
         options = dict(optlist)
         group = options['group'] if 'group' in options else None
         section = options['section'] if 'section' in options else None
@@ -122,8 +124,7 @@ class Pre(callbacks.Plugin):
         if releases:
             irc.reply("Sending last {0} nukes in a PM ...".format(len(releases)))
             for release in releases:
-                messages = format_nuke(release)
-                for message in messages: irc.reply(message, private=True)
+                self._reply(format_nuke(release), private=True)
         else:
             irc.reply("No nukes.")
 
