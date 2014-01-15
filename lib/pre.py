@@ -148,7 +148,7 @@ class Release:
         """
         if self.nukes:
             self.nukes.sort(key=lambda n: n.time)
-            return self.nukes[0]
+            return self.nukes[-1]
 
     def status(self):
         """
