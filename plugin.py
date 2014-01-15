@@ -1,5 +1,5 @@
 
-import os
+import sys, os
 from lib import pre
 from Cheetah.Template import Template
 
@@ -17,6 +17,7 @@ import supybot.callbacks as callbacks
 
 
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), 'templates')
+sys.path.append(TEMPLATE_DIR)
 
 _release_template = Template(file=os.path.join(TEMPLATE_DIR, 'release.tmpl'))
 def format_release(release):
