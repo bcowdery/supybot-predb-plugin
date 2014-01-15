@@ -1,5 +1,4 @@
 #import supybot.ircutils as irc
-#import templateutils as utils
 ##
 ## doc: Template for rendering pre Release objects as formatted strings.
 ##      Used by the (dupe) and (pre) commands
@@ -12,8 +11,9 @@
 ##      $r.size         size in MB
 ##      $r.time         datetime
 ##      $r.nukes        list of pre.Nuke objects
-##      $r.last_nuke    most recent nuke or unnuke 
-##      $r.status       textual status of release, PRE/NUKE/UNNUKE
+##      $r.last_nuke()  most recent nuke or unnuke 
+##      $r.status()     textual status of release, PRE/NUKE/UNNUKE
+##      $r.age()        age of the release in the format "0d 0h 0mi 0s"
 ##
 ## $irc.bold(s)        
 ##      * returns the string s, bolded.
@@ -29,4 +29,4 @@
 ##      * see http://www.mirc.com/colors.html
 ##
 
-[$irc.bold($r.status)/$r.section] $r.release [$utils.since($r.time)] [$irc.bold('F')$r.files/$r.size$irc.bold('MB')] [$r.time]
+[$irc.bold($r.status())/$r.section] $r.release [$r.age()] [$irc.bold('F')$r.files/$r.size$irc.bold('MB')] [$r.time]

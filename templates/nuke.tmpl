@@ -1,5 +1,4 @@
 #import supybot.ircutils as irc
-#import templateutils as utils
 ##
 ## doc: Template for rendering pre Release and Nuke objects as formatted strings.
 ##      Used by the (lastnuke) command
@@ -12,8 +11,9 @@
 ##      $r.size         size in MB
 ##      $r.time         datetime
 ##      $r.nukes        list of pre.Nuke objects
-##      $r.last_nuke    most recent nuke or unnuke as a pre.Nuke object
-##      $r.status       textual status of release, PRE/NUKE/UNNUKE
+##      $r.last_nuke()  most recent nuke or unnuke 
+##      $r.status()     textual status of release, PRE/NUKE/UNNUKE
+##      $r.age()        age of the release in the format "0d 0h 0mi 0s"
 ##
 ## pre.Nuke:
 ##      $nuke.isnuke     is currently nuked, false if unnuked
@@ -36,8 +36,8 @@
 ##      * see http://www.mirc.com/colors.html
 ##
 
-#set $nuke = $r.last_nuke
+#set $nuke = $r.last_nuke()
 #set $status = "Nuked" if $nuke.isnuke else "Unnuked"
 
-[$irc.bold($r.status)/$r.section] $r.release [$utils.since($r.time)] [$irc.bold('F')$r.files/$r.size$irc.bold('MB')] [$r.time]
-    $status on $nuke.time [$nuke.network], $nuke.reason
+[$irc.bold($r.status())/$r.section] $r.release [$r.age()] [$irc.bold('F')$r.files/$r.size$irc.bold('MB')] [$r.time]
+    $status on $nuke.time [$nuke.network] -- $nuke.reason

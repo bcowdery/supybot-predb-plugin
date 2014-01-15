@@ -21,11 +21,9 @@ class Releases:
         if r.text: return json.loads(r.text.split('\n')[-1])
 
     def _as_releases(self, list):
-        releases = []
-        if list:
-            for rel in list:
-                releases += [ Release(rel) ]
-        return releases
+        if list: return [ Release(r) for r in list ]
+        return []
+
 
     # Pre.IM Web API methods
 
@@ -136,30 +134,42 @@ class Release:
         self.files     = dict['files']
         self.size      = dict['size']
         self.time      = datetime.datetime.utcfromtimestamp(dict['time'])
-        self.nukes     = self._nukes(dict['nukes'])
-        self.last_nuke = self.nukes[0] if self.nukes else None
-        self.status    = self._status()
+        self.nukes     = [ Nuke(self, nuke) for nuke in dict['nukes']] if dict['nukes'] else []
+        
+    def last_nuke(self):
+        """
+        Sorts the list of nukes by datetime and returns the last (newest) 
+        nuke status if any.
+        """
+        if self.nukes:
+            self.nukes.sort(key=lambda n: n.time)
+            return self.nukes[0]
 
-    # Parse nukes, sort by date so the newest is first
-    def _nukes(self, list):
-        nukes = []
-        if list:
-            for nuke in list:
-                nukes += [ Nuke(self, nuke) ]
-            nukes.sort(key=lambda n: n.time)
-        return nukes
-
-    # Textual status of the release, is it nuked?
-    def _status(self):
-        if self.last_nuke:
-            if self.last_nuke.isnuke:
+    def status(self):
+        """
+        Returns the current status of this release, PRE/NUKED/UNNUED,
+        based on the last nuke if any. 
+        """
+        latest = self.last_nuke()
+        if latest:
+            if latest.isnuke:
                 return "NUKED"
             else:
                 return "UNNUKED"
         return "PRE"
 
+    def age(self):
+        """
+        Returns the age of this release in the format "0d 0h 0mi 0s".
+        """
+        total_seconds = (datetime.datetime.now() - self.time).total_seconds()
+        days, seconds = divmod(total_seconds, 86400)
+        hours, seconds = divmod(seconds, 3600)
+        minutes, seconds = divmod(seconds, 60)
+        return "%dd %dh %dmi %ds" % (days, hours, minutes, seconds)
+
     def __str__(self):
-        return "[{0}/{1}] {2} [F{3}/{4}MB] [{5}]".format(self.status, self.section, self.release, self.files, self.size, self.time)
+        return "[{0}/{1}] {2} [{3}] [F{4}/{5}MB] [{6}]".format(self.status(), self.section, self.release, self.age(), self.files, self.size, self.time)
 
 
 class Nuke:
@@ -172,8 +182,8 @@ class Nuke:
         self.time       = datetime.datetime.utcfromtimestamp(dict['time'])
 
     def __str__(self):
-        type = "Nuked" if self.isnuke else "Unnuked"
-        return "* {0} on {1} [{2}] \n\t{3}".format(type, self.time, self.network, self.reason)
+        status = "Nuked" if self.isnuke else "Unnuked"
+        return "* {0} on {1} [{2}] -- {3}".format(status, self.time, self.network, self.reason)
 
 
 class Section:
