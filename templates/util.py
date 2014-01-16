@@ -7,7 +7,7 @@ def files(r):
     formatted string for IRC messages.
     """
     if r.files or r.size:
-        return "F%s/%sMB" % (irc.bold(r.files), irc.bold(r.size))    
+        return "%sF/%sMB" % (irc.bold(r.files), irc.bold(r.size))    
     return irc.mircColor('?', fg=7)
     
 def status(r):
