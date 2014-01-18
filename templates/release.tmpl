@@ -2,19 +2,26 @@
 #import util
 ##
 ## doc: Template for rendering pre Release objects as formatted strings.
-##      Used by the (dupe) and (pre) commands
+##      Used by the (dupe), (pre), (lastnukes), (lastunnukes) and (lastpres) commands
 ##  
 ## pre.Release:
 ##      $r.release      release name
 ##      $r.section      section 
 ##      $r.genre        genre
-##      $r.files        number of files 
+##      $r.files        number of files, use $util.files($r) for auto colorization
 ##      $r.size         size in MB
 ##      $r.time         datetime
 ##      $r.nukes        list of pre.Nuke objects
-##      $r.last_nuke()  most recent nuke or unnuke 
-##      $r.status()     textual status of release, PRE/NUKE/UNNUKE
-##      $r.age()        age of the release in the format "0d 0h 0mi 0s"
+##      $r.last_nuke()  most recent nuke or unnuke
+##      $r.status()     textual status of release, PRE/NUKE/UNNUKE, use $util.status($r) for auto colorization
+##      $r.age()        age of the release in the format "0d 0h 0mi 0s", use $util.age($r) for auto colorization
+##
+## pre.Nuke:
+##      $nuke.isnuke     is currently nuked, false if unnuked
+##      $nuke.ismodnuke  has the nuke reason been modified
+##      $nuke.reason     reason the release was nuked
+##      $nuke.network    network the release was nuked on
+##      $nuke.time       datetime of the nuke status
 ##
 ## $irc.bold(s)        
 ##      * returns the string s, bolded.
@@ -32,4 +39,9 @@
 
 #for $r in $releases
 [$util.status($r)/$r.section] $r.release [$util.age($r)] [$util.files($r)] [$r.time]
+#if $r.nukes
+    #set $nuke = $r.last_nuke()
+    #set $status = "Nuked" if $nuke.isnuke else "Unnuked"
+    $status on $nuke.time [$nuke.network] -- $nuke.reason    
+#end if
 #end for

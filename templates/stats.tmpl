@@ -1,0 +1,38 @@
+#import supybot.ircutils as irc
+#import util
+##
+## doc: Template for rendering pre Stats objects as formatted strings.
+##      Used by the (stats) command
+##  
+## pre.Group:
+##      $s.releases   number of releases
+##      $s.nukes      number of nukes
+##      $s.unnukes    number of unnukes
+##      $s.deletes    number of deletes
+##      $s.undeletes  number of undeletes
+##      $s.first      first release as a pre.Release object
+##      $s.last       last, most recent release as a pre.Release object
+##
+## $irc.bold(s)        
+##      * returns the string s, bolded.
+##
+## $irc.reverse(s)     
+##      * returns the string s, with inverted forground and background colors.
+##
+## $irc.underline(s)   
+##      * returns the string s, underlined.
+##
+## $irc.mircColor(s, fg=None, bg=None)
+##      * returns the string s with the given mIRC color codes applied.
+##      * see http://www.mirc.com/colors.html
+##
+
+#set $first = $s.first
+#set $last = $s.last
+$irc.bold('Releases:  ') $s.releases
+$irc.bold('Nukes:     ') $s.nukes
+$irc.bold('Unnukes:   ') $s.unnukes
+$irc.bold('Deletes:   ') $s.deletes
+$irc.bold('UnDeletes: ') $s.undeletes
+$irc.bold('First:     ') [$util.status($first)/$first.section] $first.release [$util.age($first)] [$util.files($first)] [$first.time]
+$irc.bold('Latest:    ') [$util.status($last)/$last.section] $last.release [$util.age($last)] [$util.files($last)] [$last.time]
