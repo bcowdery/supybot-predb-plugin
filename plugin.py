@@ -192,7 +192,7 @@ class Pre(callbacks.Plugin):
     lastpres = wrap(lastpres, [getopts({ 'section': 'something' })])
 
 
-    def stats(self, irc, msg, args):
+    def predb(self, irc, msg, args):
         """Show some statistics about the pre database"""
 
         self.log.info("stats { }")
@@ -203,7 +203,7 @@ class Pre(callbacks.Plugin):
         else:
             irc.reply("No stats available.")
 
-    stats = wrap(stats)
+    predb = wrap(predb)
 
 
 Class = Pre
